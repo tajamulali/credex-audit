@@ -50,14 +50,13 @@ function auditCursor(planId: string, seats: number, monthlySpend: number, useCas
   }
 
   if (useCase === 'writing' || useCase === 'research') {
-    const savings = monthlySpend
     return {
       type: 'switch',
       description: 'Consider switching to Claude Pro or ChatGPT Plus',
       suggestedTool: 'Claude Pro ($20/month)',
       monthlySavings: Math.max(0, monthlySpend - 20),
       annualSavings: Math.max(0, (monthlySpend - 20) * 12),
-      reason: `Cursor is a coding IDE. For ${useCase} workflows, Claude or ChatGPT gives better value at lower cost.`,
+      reason: `Cursor is a coding IDE. For ${useCase} tasks, Claude or ChatGPT gives better value at lower cost.`,
     }
   }
 
@@ -210,7 +209,7 @@ function auditChatGPT(planId: string, seats: number, monthlySpend: number, useCa
   }
 }
 
-function auditAPITool(toolId: ToolName, monthlySpend: number, useCase: string): Recommendation {
+function auditAPITool(toolId: ToolName, monthlySpend: number, _useCase: string): Recommendation {
   if (monthlySpend > 500) {
     return {
       type: 'credits',
@@ -240,7 +239,7 @@ function auditAPITool(toolId: ToolName, monthlySpend: number, useCase: string): 
   }
 }
 
-function auditGemini(planId: string, seats: number, monthlySpend: number, useCase: string): Recommendation {
+function auditGemini(planId: string, seats: number, monthlySpend: number, _useCase: string): Recommendation {
   if (planId === 'business' && seats <= 3) {
     const advancedCost = seats * 20
     const savings = monthlySpend - advancedCost

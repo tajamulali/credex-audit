@@ -39,13 +39,17 @@ export default function NewAuditPage() {
   // Load from localStorage on mount
   useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY)
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved)
-        setTeamSize(parsed.teamSize ?? 1)
-        setUseCase(parsed.useCase ?? 'coding')
-        setTools(parsed.tools ?? [emptyTool()])
-      } catch {}
+    if (!saved) return
+    try {
+      const parsed = JSON.parse(saved)
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setTeamSize(parsed.teamSize ?? 1)
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setUseCase(parsed.useCase ?? 'coding')
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setTools(parsed.tools ?? [emptyTool()])
+    } catch {
+      // ignore malformed storage
     }
   }, [])
 
@@ -60,7 +64,7 @@ export default function NewAuditPage() {
     setTools(tools.filter((_, i) => i !== index))
   }
 
-  const updateTool = (index: number, field: keyof ToolInput, value: any) => {
+  const updateTool = (index: number, field: keyof ToolInput, value: string | number) => {
     const updated = [...tools]
     if (field === 'toolId') {
       updated[index] = { ...updated[index], toolId: value, planId: '' }
@@ -111,7 +115,7 @@ export default function NewAuditPage() {
       // Clear saved form
       localStorage.removeItem(STORAGE_KEY)
       router.push(`/audit/${data.slug}`)
-    } catch (err) {
+    } catch {
       setError('Failed to submit. Please try again.')
       setLoading(false)
     }

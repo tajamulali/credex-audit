@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
 import { AuditResult, ToolAuditResult } from '@/types'
+import Link from 'next/link'
 
 type Props = {
   audit: AuditResult
@@ -184,7 +185,7 @@ export default function AuditResults({ audit }: Props) {
 
   const shareUrl = `${typeof window !== 'undefined' ? window.location.origin : ''}/audit/${audit.slug}`
   const isHighSavings = audit.totalMonthlySavings > 500
-  const isOptimal = audit.totalMonthlySavings < 100
+  void audit.totalMonthlySavings // isOptimal reserved for future use
 
   useEffect(() => {
     if (!audit.aiSummary) {
@@ -208,6 +209,7 @@ export default function AuditResults({ audit }: Props) {
         })
         .catch(() => setSummaryLoading(false))
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleCopyLink = () => {
@@ -267,10 +269,7 @@ export default function AuditResults({ audit }: Props) {
                 </div>
               </div>
               
-                href="https://credex.rocks"
-                target="_blank"
-                rel="noopener noreferrer"
-              <a>
+              <a href="https://credex.rocks" target="_blank" rel="noopener noreferrer">
                 <Button className="mt-4 bg-purple-700 hover:bg-purple-800 text-white w-full">
                   Talk to Credex — Book a Free Consultation
                 </Button>
@@ -338,9 +337,9 @@ export default function AuditResults({ audit }: Props) {
 
         {/* Run another */}
         <div className="text-center mt-8">
-          <a href="/audit/new" className="text-sm text-zinc-500 underline">
+           <Link href="/audit/new" className="text-sm text-zinc-500 underline">
             Run another audit
-          </a>
+          </Link>
         </div>
       </div>
     </main>

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
+import { ToolAuditResult } from '@/types'
 import Anthropic from '@anthropic-ai/sdk'
 
 const anthropic = new Anthropic({
@@ -13,7 +14,7 @@ export async function POST(req: NextRequest) {
     const { toolResults, totalMonthlySavings, useCase, teamSize } = auditData
 
     const toolSummary = toolResults
-      .map((t: any) => `${t.toolName} (${t.currentPlan}): $${t.currentMonthlySpend}/mo — ${t.recommendation.description}`)
+      .map((t: ToolAuditResult) => `${t.toolName} (${t.currentPlan}): $${t.currentMonthlySpend}/mo — ${t.recommendation.description}`)
       .join('\n')
 
     const prompt = `You are a financial advisor specializing in SaaS spend optimization for startups.
@@ -36,7 +37,8 @@ Write a personalized 100-word summary for this team. Be direct and specific. Men
         messages: [{ role: 'user', content: prompt }],
       })
 
-      summary = (message.content[0] as any).text
+      const block = message.content[0]
+      summary = 'text' in block ? block.text : ''
     } catch (apiError) {
       console.error('Anthropic API error:', apiError)
       // Fallback template

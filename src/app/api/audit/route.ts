@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
     const auditResult = runAudit(body)
 
     // Save to Supabase
-    const { data, error } = await supabaseAdmin
+    const { error } = await supabaseAdmin
       .from('audits')
       .insert({
         slug: auditResult.slug,
@@ -33,11 +33,10 @@ export async function POST(req: NextRequest) {
       .select()
       .single()
 
-    if (error) {
-      console.error('Supabase error full:', JSON.stringify(error))
-      console.error('Supabase URL:', process.env.NEXT_PUBLIC_SUPABASE_URL)
+  if (error) {
+      console.error('Supabase error:', error)
       return NextResponse.json(
-        { error: 'Failed to save audit', detail: error.message },
+        { error: 'Failed to save audit' },
         { status: 500 }
       )
     }
