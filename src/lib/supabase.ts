@@ -8,4 +8,7 @@ const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
 // Admin client for server-side usage (bypasses RLS)
-export const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey)
+export const supabaseAdmin = createClient(
+  supabaseUrl ?? 'https://placeholder.supabase.co',
+  supabaseServiceKey ?? 'placeholder'
+)
