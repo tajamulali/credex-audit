@@ -32,7 +32,7 @@ Write a personalized 100-word summary for this team. Be direct and specific. Men
 
     try {
       const message = await anthropic.messages.create({
-        model: 'claude-haiku-4-5-20251001',
+        model: 'claude-haiku-4-5',
         max_tokens: 200,
         messages: [{ role: 'user', content: prompt }],
       })
