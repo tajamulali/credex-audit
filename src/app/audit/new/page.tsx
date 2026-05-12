@@ -67,7 +67,7 @@ export default function NewAuditPage() {
   const updateTool = (index: number, field: keyof ToolInput, value: string | number) => {
     const updated = [...tools]
     if (field === 'toolId') {
-      updated[index] = { ...updated[index], toolId: value, planId: '' }
+      updated[index] = { ...updated[index], toolId: value as ToolName, planId: '' }
     } else {
       updated[index] = { ...updated[index], [field]: value }
     }
